@@ -1,0 +1,50 @@
+<dom-module id="dynamic-form">
+  <template>
+    <div id="content">
+      <template is="dom-repeat" items="{{items}}">
+        <div>First name: <span>{{item.title}}</span></div>
+    </template>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    
+    is: "dynamic-form",
+    
+    properties: {
+      
+      items: { type: Array },
+      
+      data : {
+        type: Object,
+        observer: 'dataObserver'
+      } 
+    },
+
+    ready: function(){
+    },
+
+    dataObserver: function(newVal){
+      console.log(333333,newVal);
+    },
+
+    mockLoaded: function(response){
+      this.dataHandler(response.detail);
+    },
+
+    mockFailed: function(data){
+      this.title = 'ERROR!';
+    },
+
+    dataHandler: function(data){
+      this.items = data.items;
+      var i = 0, l = this.items.length;
+      for(i;i<l;i++){
+        console.log(this.items[i].title);
+      }
+    }
+
+  });
+</script>
