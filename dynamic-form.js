@@ -23,41 +23,48 @@ Polymer({
       var formElements = data.items;
       var i = 0, l = formElements.length;
       for(i;i<l;i++){
-        this.importComponent(formElements[i].type);
+        this.importComponent(formElements[i]);
       }
     },
 
-    importComponent: function(element){
-      var path = this.bowerPath + element + '/' + element + '.html';
+    importComponent: function(formElement){
+      var path = this.bowerPath + formElement.polymerElement.parent + '/' + formElement.polymerElement.child + '.html';
       this.importHref(path, function(e) {
-        console.log('IMPORTED',e.path[0].href);
-        this.AppendElement(element);
+        this.elementHandler(formElement);
       }, function(e) {
-        console.log('ERROR',e);
+        console.log(e);
       });
     },
 
-    AppendElement: function(element){
-      var container = this.$.container;
-      var newElement = document.createElement(element);
-      Polymer.dom(container).appendChild(newElement);
-
+    elementHandler: function(formElement){
+      switch(formElement.polymerElement.parent){
+        case 'paper-input':
+          this.paperInputHandler(formElement);
+          break;
+        case 'paper-radio-button':
+          this.paperRadioHandler(formElement);
+        }
     },
 
-    mockLoaded: function(response){
-      this.dataHandler(response.detail);
+    appendElement: function(formElement){
+      var container = this.$.form;
+      var elementType = formElement.polymerElement.parent;
+      var newElement = document.createElement(formElement.polymerElement.child);
+      return Polymer.dom(container).appendChild(newElement);
     },
 
-    mockFailed: function(data){
-      this.title = 'ERROR!';
+    paperInputHandler: function(formElement){
+      var newElement = this.appendElement(formElement);
+      newElement.label = formElement.label;
+      newElement.name = formElement.inputName;
     },
 
-    dataHandler: function(data){
-      this.items = data.items;
-      var i = 0, l = this.items.length;
+    paperRadioHandler: function(formElement){
+      var options = formElement.options;
+      var i = 0, l = options.length;
       for(i;i<l;i++){
-        console.log(this.items[i].title);
+        var newElement = this.appendElement(formElement);
+        newElement.name = formElement.inputName;
       }
-    }
-
+    },
 });
