@@ -5,15 +5,23 @@ Polymer({
     properties: {
       
       data : {
-        type: Object,
-        notify: false,
-        observer: 'dataObserver'
+        type : Object,
+        notify : false,
+        observer : 'dataObserver'
       },
 
-      bowerPath: {
-        type: String,
-        value: '../../../bower_components/'
-      } 
+      bowerPath : {
+        type : String
+      },
+
+      action : {
+        type : String
+      },
+
+      method : {
+        type : String,
+        value : 'POST'
+      }
     },
 
     appendElement: function(node, element){
