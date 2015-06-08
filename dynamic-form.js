@@ -94,7 +94,7 @@ Polymer({
     },
 
     submitForm: function(event){
-      document.getElementById('form').submit();
+      Polymer.dom(event).localTarget.parentElement.submit();
     },
 
     paperButtonHandler: function(formComponent){
