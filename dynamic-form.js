@@ -46,9 +46,8 @@ Polymer({
         this.addTextToElement(this.$.form,formComponent.title);
         if(formComponent.description) this.addTextToElement(this.$.form,formComponent.description);
         var newComponent = this.appendElement(this.$.form,formComponent.type);
-        newComponent.id = formComponent.id;
-        newComponent.label = formComponent.label;
-        newComponent.name = formComponent.fieldName;
+        newComponent.setAttribute('name', formComponent.fieldName);
+        newComponent.setAttribute('label', formComponent.label);
         return newComponent;
       }
     },
@@ -63,9 +62,9 @@ Polymer({
         var i = 0, l = options.length;
         for(i;i<l;i++){
           var newComponent = this.appendElement(this.$.form,elementType);
-          this.addTextToElement(this.$.form,formComponent.options[i].name);
-          newComponent.name = formComponent.fieldName;
-          newComponent.label = formComponent.label;
+          this.addTextToElement(this.$.form, options[i].name);
+          newComponent.setAttribute('name', options[i].name);
+          newComponent.setAttribute('label', options[i].name);
           arrElement.push(newComponent);
         }
         return arrElement;
@@ -86,11 +85,23 @@ Polymer({
         for(i;i<l;i++){
           var newComponent = this.appendElement(radioGroup,'paper-radio-button');
           this.addTextToElement(radioGroup, options[i].name);
-          newComponent.name = options[i].name;
-          newComponent.label = options[i].name;
+          newComponent.setAttribute('name', options[i].name);
+          newComponent.setAttribute('label', options[i].name);
           arrElement.push(newComponent);
         }
          return Polymer.dom(this.$.form).appendChild(radioGroup);
+      }
+    },
+
+    paperButtonHandler: function(formComponent){
+      return function(){
+        var newComponent = this.appendElement(this.$.form,'paper-button');
+        this.appendContent(newComponent,formComponent.label); 
+        newComponent.setAttribute('raised', true);
+        newComponent.setAttribute('onclick', 'submitForm(event)');
+        newComponent.setAttribute('type', 'submit');
+        newComponent.setAttribute('label', formComponent.label);
+        return newComponent;
       }
     },
 
@@ -120,6 +131,10 @@ Polymer({
           var path = this.bowerPath + 'paper-radio-group/paper-radio-group.html';
           var callback = this.paperRadioHandler(formComponent).bind(this);
           break;
+        case 'paper-button':
+          var path = this.bowerPath + 'paper-button/paper-button.html';
+          var callback = this.paperButtonHandler(formComponent).bind(this);
+          break;
         }
 
         this.importComponent(path, callback);
@@ -133,3 +148,7 @@ Polymer({
       }
     }
 });
+
+function submitForm(event){
+  Polymer.dom(event).localTarget.parentElement.submit();
+}
