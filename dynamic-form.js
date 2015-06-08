@@ -22,7 +22,7 @@ Polymer({
       bowerPath : {
         type : String,
         value : '../../bower_components/'
-      }
+      },
 
     },
 
@@ -93,13 +93,16 @@ Polymer({
       }
     },
 
+    submitForm: function(event){
+      document.getElementById('form').submit();
+    },
+
     paperButtonHandler: function(formComponent){
       return function(){
         var newComponent = this.appendElement(this.$.form,'paper-button');
         this.appendContent(newComponent,formComponent.label); 
         newComponent.setAttribute('raised', true);
-        newComponent.setAttribute('onclick', 'submitForm(event)');
-        newComponent.setAttribute('type', 'submit');
+        this.listen(newComponent,'click','submitForm');
         newComponent.setAttribute('label', formComponent.label);
         return newComponent;
       }
@@ -148,7 +151,3 @@ Polymer({
       }
     }
 });
-
-function submitForm(event){
-  Polymer.dom(event).localTarget.parentElement.submit();
-}
