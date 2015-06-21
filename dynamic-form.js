@@ -41,10 +41,36 @@ Polymer({
       return Polymer.dom(element).appendChild(span);
     },
 
+    addClass: function(element, cssClass){
+      return element.classList.add(cssClass);
+    },
+    
+    addTitle: function(title){
+      var titleElement = this.addTextToElement(this.$.form,title);
+      this.addClass(titleElement,'title');
+      return titleElement;
+    },
+    
+    addDescription: function(description){
+      var descElement = this.addTextToElement(this.$.form,description);
+      this.addClass(descElement,'description');
+    },
+
+    addOption: function(node, optionType, optionName){
+      var newComponent = this.appendElement(node, optionType);
+      newComponent.setAttribute('name', optionName);
+      newComponent.setAttribute('label', optionName);
+      
+      var span = document.createElement('span');
+      span.textContent = optionName; 
+      newComponent.appendChild(span);
+      return newComponent;
+    },
+
     paperInputHandler: function(formComponent){
       return function(){
-        this.addTextToElement(this.$.form,formComponent.title);
-        if(formComponent.description) this.addTextToElement(this.$.form,formComponent.description);
+        this.addTitle(formComponent.title);
+        if(formComponent.description) this.addDescription(formComponent.description);
         var newComponent = this.appendElement(this.$.form,formComponent.type);
         newComponent.setAttribute('name', formComponent.fieldName);
         newComponent.setAttribute('label', formComponent.label);
@@ -57,14 +83,11 @@ Polymer({
         var options = formComponent.options;
         var elementType = formComponent.type;
         var arrElement = [];
-        this.addTextToElement(this.$.form,formComponent.label);
+        this.addTitle(formComponent.title);
         
         var i = 0, l = options.length;
         for(i;i<l;i++){
-          var newComponent = this.appendElement(this.$.form,elementType);
-          this.addTextToElement(this.$.form, options[i].name);
-          newComponent.setAttribute('name', options[i].name);
-          newComponent.setAttribute('label', options[i].name);
+          var newComponent = this.addOption(this.$.form, elementType, options[i].name);
           arrElement.push(newComponent);
         }
         return arrElement;
@@ -77,19 +100,13 @@ Polymer({
         var options = formComponent.options;
         var elementType = formComponent.type;
         var radioGroup = document.createElement('paper-radio-group');
-        
-        this.addTextToElement(this.$.form, formComponent.label);
-        this.appendContent(radioGroup,document.createElement('paper-radio-button'));  
+        this.addTitle(formComponent.title);
         
         var i = 0, l = options.length;
         for(i;i<l;i++){
-          var newComponent = this.appendElement(radioGroup,'paper-radio-button');
-          this.addTextToElement(radioGroup, options[i].name);
-          newComponent.setAttribute('name', options[i].name);
-          newComponent.setAttribute('label', options[i].name);
-          arrElement.push(newComponent);
+          this.addOption(radioGroup, 'paper-radio-button',options[i].name);
         }
-         return Polymer.dom(this.$.form).appendChild(radioGroup);
+        return Polymer.dom(this.$.form).appendChild(radioGroup);
       }
     },
 
@@ -109,7 +126,7 @@ Polymer({
     },
 
     importComponent: function(path, callback){
-     this.importHref(path, function(e) {
+      this.importHref(path, function(e) {
         callback();
       }, function(e) {
           throw new Error("Can't import "+ e.path[0].href);

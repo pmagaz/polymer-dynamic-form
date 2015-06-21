@@ -1,4 +1,36 @@
 <dom-module id="dynamic-form">
+<style is="custom-style">
+    .title{
+      display: block;
+      font-size: 20px;
+      margin: 30px 0px 30px 0px;
+    }
+
+    .description{
+      display: block;
+      font-size: 16px;
+      padding-left: 12px;
+    }
+    
+    paper-checkbox {
+      display: block;
+      padding: 12px;
+      margin: 20px 0px 20px 0px;
+    }
+
+    paper-textarea{
+      padding-left: 12px;
+    }
+    
+    paper-radio-button {
+      display: block;
+      margin: 20px 0px 20px 0px;
+    }
+    paper-button {
+      display: block;
+      margin: 20px 0px 20px 0px;
+    }
+</style>
   <template>
   <form name="form" is="iron-form" id="form" method="{{method}}" action="{{action}}">
   </form>
