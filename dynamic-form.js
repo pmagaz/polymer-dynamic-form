@@ -191,7 +191,12 @@ Polymer({
         this.importComponent(path, callback);
     },
 
+    resetContainer: function(){
+      this.$.form.innerHTML = '';
+    },
+
     dataObserver: function(data){
+      this.resetContainer();
       var formComponents = data.items;
       var i = 0, l = formComponents.length;
       for(i;i<l;i++){
